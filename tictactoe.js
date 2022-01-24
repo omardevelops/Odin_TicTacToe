@@ -8,5 +8,12 @@ const gameboard = (() => {
     return {tickSpot, logGameboard}
 })();
 
-gameboard.tickSpot('o', 4);
-gameboard.logGameboard();
+const Player = (name, symbol) => {
+    const getName = () => name;
+    const getSymbol = () => symbol;
+    return {getName, getSymbol};
+};
+// const john = Player('john', 'x');
+
+// gameboard.tickSpot('o', 3);
+// gameboard.logGameboard();
