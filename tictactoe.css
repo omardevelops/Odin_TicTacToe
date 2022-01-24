@@ -1,0 +1,30 @@
+#main_menu {
+    /* background: black; */
+    margin: 0 auto;
+    padding: 30px;
+}
+
+#main_menu button {
+    display: block;
+    margin: 15px auto;
+    width: 70vw;
+    height: 35vh;
+    font-size: max(4vw, 5vh);
+    background: transparent;
+    border: 0.4vw solid black;
+    border-radius: 5vw;
+    text-align: left;
+    padding-left: 5vw;
+}
+
+#main_menu button:hover {
+    background: #0D5C63;
+    border-color: #073236;
+    color: white;
+}
+
+#main_menu #playerVSai:hover {
+    background: #BA1200;
+    border-color: #520800;
+    color: white;
+}
