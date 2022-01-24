@@ -8,11 +8,17 @@ const gameboard = (() => {
     return {tickSpot, logGameboard}
 })();
 
-const Player = (name, symbol) => {
+const displayController = (() => {
+    const main_menu_div = document.getElementById('#main_menu');
+})();
+
+const Player = (name, symbol, isHuman) => {
     const getName = () => name;
     const getSymbol = () => symbol;
-    return {getName, getSymbol};
+    const getIsHuman = () => isHuman;
+    return {getName, getSymbol, getIsHuman};
 };
+
 // const john = Player('john', 'x');
 
 // gameboard.tickSpot('o', 3);

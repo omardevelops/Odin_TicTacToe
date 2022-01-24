@@ -27,7 +27,7 @@ body {
     height: 30vh;
     font-size: max(4vw, 5vh);
     background: transparent;
-    border: 0.4vw solid black;
+    border: 7px solid black;
     border-radius: 5vw;
     text-align: left;
     padding-left: 5vw;
