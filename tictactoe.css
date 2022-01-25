@@ -46,3 +46,7 @@ body {
     border-color: #201627;
     color: white;
 }
+
+#game_interface {
+    display: none;
+}
