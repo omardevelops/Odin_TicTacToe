@@ -9,7 +9,18 @@ const gameboard = (() => {
 })();
 
 const displayController = (() => {
-    const main_menu_div = document.getElementById('#main_menu');
+    const main_menu_div = document.getElementById('main_menu');
+    const hideMenu = () => {
+        main_menu_div.style.display = 'none';
+    };
+    const addEventListenersToButtons = () => {
+        const buttons = Array.from(main_menu_div.getElementsByTagName('button'));
+        buttons.forEach(button => {
+            button.addEventListener('click', hideMenu);
+            // logic for buttons based on ID (pvp vs player vs ai)
+        });
+    };
+    return {hideMenu, addEventListenersToButtons};
 })();
 
 const Player = (name, symbol, isHuman) => {
@@ -19,7 +30,12 @@ const Player = (name, symbol, isHuman) => {
     return {getName, getSymbol, getIsHuman};
 };
 
+const startGame = () => {
+
+};
+
 // const john = Player('john', 'x');
 
 // gameboard.tickSpot('o', 3);
 // gameboard.logGameboard();
+displayController.addEventListenersToButtons();

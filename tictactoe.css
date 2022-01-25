@@ -3,6 +3,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Poppins', sans-serif;
+    background-color: rgb(228, 228, 228);
 }
 #main_menu {
     /* background: black; */
@@ -31,6 +32,7 @@ body {
     border-radius: 5vw;
     text-align: left;
     padding-left: 5vw;
+    background-color: white;
 }
 
 #main_menu #playerVSplayer:hover {
@@ -40,7 +42,7 @@ body {
 }
 
 #main_menu #playerVSai:hover {
-    background: #7F6293;
-    border-color: #4A3956;
+    background: #7f529c;
+    border-color: #201627;
     color: white;
 }
