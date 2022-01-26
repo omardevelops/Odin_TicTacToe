@@ -11,6 +11,7 @@ const gameboard = (() => {
 const displayController = (() => {
     const main_menu_div = document.getElementById('main_menu');
     const game_interface_div = document.getElementById('game_interface');
+    const gameboard = document.getElementById('gameboard');
 
     const hideElement = (element) => {
         element.style.display = 'none';
@@ -20,7 +21,14 @@ const displayController = (() => {
     };
     const initInterface = () => {
         hideElement(main_menu_div);
-        showElement(game_interface_div, 'flex');
+        showElement(game_interface_div, 'block');
+        const spots = Array.from(gameboard.getElementsByTagName('div'));
+        spots.forEach((spot, index) => {
+            if ([0, 3, 6].includes(index))  spot.style['border-left'] = 'none';
+            if ([0, 1, 2].includes(index))  spot.style['border-top'] = 'none';
+            if ([2, 5, 8].includes(index))  spot.style['border-right'] = 'none';
+            if ([6, 7, 8].includes(index))  spot.style['border-bottom'] = 'none';
+        });
     };
     const addEventListenersToButtons = () => {
         const buttons = Array.from(main_menu_div.getElementsByTagName('button'));

@@ -1,4 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+:root {
+    --gameboard-size: 600px;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -17,9 +21,10 @@ body {
     text-align: center;
 }
 
-#main_menu h1 {
+h1 {
     width: 100%;
-    font-size: max(4vw, 5vh);
+    font-size: 72px;
+    text-align: center;
 }
 
 #main_menu button {
@@ -49,4 +54,17 @@ body {
 
 #game_interface {
     display: none;
+}
+
+#gameboard {
+    margin: 30px auto;
+    width: 500px;
+    height: 500px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+#gameboard .spot {
+    border: 5px solid black;
+    box-sizing: border-box;
 }
