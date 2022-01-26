@@ -26,7 +26,7 @@ const displayController = (() => {
         const buttons = Array.from(main_menu_div.getElementsByTagName('button'));
         buttons.forEach(button => {
             button.addEventListener('click', () => {
-                startGame(button.id);
+                game.start(button.id);
             });
         });
     };
@@ -37,18 +37,26 @@ const Player = (name, symbol, isHuman) => {
     const getName = () => name;
     const getSymbol = () => symbol;
     const getIsHuman = () => isHuman;
-    return {getName, getSymbol, getIsHuman};
+    return {toString, getName, getSymbol, getIsHuman};
 };
 
-const startGame = (gamemode) => {
-    displayController.initInterface();
-    let player1 = ('Player 1', 'O', true);
-    let player2;
-    if (gamemode === 'playerVSplayer') {
-        player2 = ('Player 2', 'X', true);
-    } else {
-        player2 = ('AI Player', 'X', false);
-    }    
-};
+const game = (() => {
+    let player1 = Player('Player 1', 'O', true);
+    let player2, gamemode, turn;
+    const setGamemode = (mode) => {
+        gamemode = mode;
+    };
+    const start = (mode) => {
+        displayController.initInterface(); // initializes interface for game
+        setGamemode(mode) // human players or human vs AI
+        if (gamemode === 'playerVSplayer') {
+            player2 = Player('Player 2', 'X', true);
+        } else {
+            player2 = Player('AI Player', 'X', false);
+        } 
+    };
+    return {start};
+
+})();
 
 displayController.addEventListenersToButtons();
