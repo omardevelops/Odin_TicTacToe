@@ -58,13 +58,28 @@ h1 {
 
 #gameboard {
     margin: 30px auto;
-    width: 500px;
-    height: 500px;
+    width: 450px;
+    height: 450px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
 }
 
 #gameboard .spot {
     border: 5px solid black;
+    width: 150px;
+    height: 150px;
     box-sizing: border-box;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 72px;
+}
+
+#scoreboard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    margin: 0 auto;
 }
