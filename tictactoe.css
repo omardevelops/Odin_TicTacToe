@@ -56,12 +56,17 @@ h1 {
     display: none;
 }
 
+#game_interface .score {
+    padding: 15px;
+}
+
 #gameboard {
     margin: 30px auto;
     width: 450px;
     height: 450px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
 }
 
 #gameboard .spot {
@@ -74,6 +79,22 @@ h1 {
     align-items: center;
     justify-content: center;
     font-size: 72px;
+    border-radius: 15px;
+}
+
+.hoverableSpot:hover {
+    background: #afdbd8;
+}
+
+.currentPlayer {
+    background-color: #201627;
+    color: white;
+    border-radius: 15px;
+}
+
+.winner {
+    background-color: #14df8a;
+    color: black;
 }
 
 #scoreboard {

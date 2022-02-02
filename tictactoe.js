@@ -26,7 +26,6 @@ const gameboard = (() => {
     const clearBoard = () => {
         for (let i = 0; i < gameboard.length; i++)
             gameboard[i] = '';
-        logGameboard();
     };
     const logGameboard = () => console.log(gameboard);
     return { tickSpot, clearBoard, isCompleteRow, isFilled }
@@ -37,6 +36,7 @@ const displayController = (() => {
     const game_interface_div = document.getElementById('game_interface');
     const gameboard_div = document.getElementById('gameboard');
     const headerTitle = document.getElementById('status_text');
+    const playerScoreHeaders = Array.from(document.getElementsByClassName('score'));
 
     const hideElement = (element) => {
         element.style.display = 'none';
@@ -47,25 +47,48 @@ const displayController = (() => {
     const setHeaderText = text => {
         headerTitle.textContent = text;
     };
+    const switchTurnVisuals = (player) => {
+        if (player.getName() === 'Player 1') {
+            playerScoreHeaders[0].classList.add('currentPlayer');
+            playerScoreHeaders[1].classList.remove('currentPlayer');
+        } else {
+            playerScoreHeaders[1].classList.add('currentPlayer');
+            playerScoreHeaders[0].classList.remove('currentPlayer');
+        }
+
+    };
+    const gameOver = (winner) => {
+        displayController.setHeaderText(`Game Over! ${winner} wins!`);
+        if (winner === 'Player 1') {
+            playerScoreHeaders[0].classList.add('winner');
+        } else {
+            playerScoreHeaders[1].classList.add('winner');
+        }
+    };
     const updateScores = (player1, player2) => {
-        const playerScoreHeaders = Array.from(document.getElementsByClassName('score'));
-        playerScoreHeaders[0].textContent = 'player1' + '🚩'.repeat(player1.getScore());
-        playerScoreHeaders[1].textContent = 'player2' + '🚩'.repeat(player2.getScore());
+        playerScoreHeaders[0].textContent = player1.getName() + '🚩'.repeat(player1.getScore());
+        playerScoreHeaders[1].textContent = player2.getName() + '🚩'.repeat(player2.getScore());
     };
     const initRound = () => { // Code to clear board for new round
         gameboard.clearBoard();
         const spots = Array.from(gameboard_div.getElementsByTagName('div'));
-        spots.forEach(spot => spot.textContent = null);
+        spots.forEach(spot => {
+            spot.textContent = null;
+            spot.classList.add('hoverableSpot');
+        });
     };
     const initInterface = () => {
         hideElement(main_menu_div);
         showElement(game_interface_div, 'block');
+        playerScoreHeaders[0].textContent = game.getPlayers().player1.getName();
+        playerScoreHeaders[1].textContent = game.getPlayers().player2.getName();
         const spots = Array.from(gameboard_div.getElementsByTagName('div'));
         spots.forEach((spot, index) => {
-            if ([0, 3, 6].includes(index)) spot.style['border-left'] = 'none';
-            if ([0, 1, 2].includes(index)) spot.style['border-top'] = 'none';
-            if ([2, 5, 8].includes(index)) spot.style['border-right'] = 'none';
-            if ([6, 7, 8].includes(index)) spot.style['border-bottom'] = 'none';
+            spot.classList.add('hoverableSpot');
+            // if ([0, 3, 6].includes(index)) spot.style['border-left'] = 'none';
+            // if ([0, 1, 2].includes(index)) spot.style['border-top'] = 'none';
+            // if ([2, 5, 8].includes(index)) spot.style['border-right'] = 'none';
+            // if ([6, 7, 8].includes(index)) spot.style['border-bottom'] = 'none';
 
             spot.addEventListener('click', () => {
                 if (game.isRoundOver() === false) {
@@ -73,6 +96,7 @@ const displayController = (() => {
                     if (currentPlayer.getIsHuman() && spot.textContent.length === 0) {
                         spot.textContent = currentPlayer.getSymbol(); // Get respective Player Symbol
                         gameboard.tickSpot(currentPlayer.getSymbol(), index);
+                        spot.classList.remove('hoverableSpot');
                         if (game.isRoundOver()) {
                             game.endRound();
                         } else {
@@ -92,7 +116,7 @@ const displayController = (() => {
             });
         });
     };
-    return { initInterface, addEventListenersToButtons, setHeaderText, initRound, updateScores };
+    return { initInterface, addEventListenersToButtons, setHeaderText, initRound, updateScores, switchTurnVisuals, gameOver };
 })();
 
 const Player = (name, symbol, isHuman, score) => {
@@ -118,20 +142,20 @@ const game = (() => {
     const switchTurn = () => {
         if (currentPlayer == player1) currentPlayer = player2;
         else currentPlayer = player1;
+        displayController.switchTurnVisuals(currentPlayer);
     };
     const isGameOver = () => {
         if (player1.getScore() === winningScore || player2.getScore() === winningScore)
-            return true;      
+            return true;
     };
     const isRoundOver = () => {
         return gameboard.isCompleteRow() || gameboard.isFilled();
     };
     const endGame = () => {
-        displayController.setHeaderText(`Game Over! ${winner} wins!`);
+        displayController.gameOver(winner);
     };
     const startRound = () => {
         displayController.initRound();
-
     };
     const endRound = () => {
         roundNum++;
@@ -156,7 +180,6 @@ const game = (() => {
     };
 
     const start = (mode) => {
-        displayController.initInterface(); // initializes interface for game
         setGamemode(mode) // human players or human vs AI
         roundNum = 1;
         displayController.setHeaderText(`Round ${roundNum}`);
@@ -166,8 +189,12 @@ const game = (() => {
             player2 = Player('AI Player', 'X', false, 0);
         }
         setCurrentPlayer(player1);
+        displayController.initInterface(); // initializes interface for game
     };
-    return { start, endRound, getCurrentPlayer, switchTurn, isRoundOver };
+    const getPlayers = () => {
+        return {player1, player2};
+    };
+    return { start, endRound, getCurrentPlayer, switchTurn, isRoundOver, getPlayers };
 
 })();
 
