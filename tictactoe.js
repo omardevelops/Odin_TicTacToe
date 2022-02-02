@@ -3,7 +3,7 @@ const gameboard = (() => {
     const tickSpot = (symbol, index) => {
         const spot = gameboard[index]; // retrieve spot to check if empty
         if (spot === '' && index < gameboard.length) gameboard.splice(index, 1, symbol);
-        console.log(gameboard);
+        // console.log(gameboard);
     };
     const isCompleteRow = () => { // Check for complete row/column/diagonal
         const completeRows = [[0,1,2], [0,4,8], [0,3,6], [3,4,5], [6,7,8], [1,4,7], [2,5,8], [2,4,6]];
@@ -23,8 +23,13 @@ const gameboard = (() => {
         }
         return true;
     };
+    const clearBoard = () => {
+        for (let i = 0; i < gameboard.length; i++)
+            gameboard[i] = '';  
+        logGameboard();
+    };
     const logGameboard = () => console.log(gameboard);
-    return {tickSpot, logGameboard, isCompleteRow, isFilled}
+    return {tickSpot, clearBoard, isCompleteRow, isFilled}
 })();
 
 const displayController = (() => {
@@ -41,7 +46,11 @@ const displayController = (() => {
     };
     const setHeaderText = text => {
         headerTitle.textContent = text;
-        console.log(headerTitle);
+    };
+    const initRound = () => { // Code to clear board for new round
+        gameboard.clearBoard();
+        const spots = Array.from(gameboard_div.getElementsByTagName('div'));
+        spots.forEach(spot => spot.textContent = undefined);
     };
     const initInterface = () => {
         hideElement(main_menu_div);
@@ -78,7 +87,7 @@ const displayController = (() => {
             });
         });
     };
-    return {initInterface, addEventListenersToButtons, setHeaderText};
+    return {initInterface, addEventListenersToButtons, setHeaderText, initRound};
 })();
 
 const Player = (name, symbol, isHuman) => {
@@ -89,9 +98,8 @@ const Player = (name, symbol, isHuman) => {
 };
 
 const game = (() => {
-    const maxRounds = 5;
     let player1 = Player('Player 1', 'O', true);
-    let player2, gamemode, currentPlayer, winner;
+    let player2, gamemode, currentPlayer, winner, roundNum;
     const setGamemode = (mode) => {
         gamemode = mode;
     };
@@ -104,7 +112,7 @@ const game = (() => {
         else currentPlayer = player1;
     };
     const isGameOver = () => {
-
+        
     };
     const isRoundOver = () => {
         return gameboard.isCompleteRow() || gameboard.isFilled();
@@ -112,18 +120,28 @@ const game = (() => {
     const endGame = () => {
         
     };
+    const startRound = () => {
+        displayController.initRound();
+
+    };
     const endRound = () => {
+        roundNum++;
         if (gameboard.isCompleteRow()) {
             winner = currentPlayer.getName();
             displayController.setHeaderText(`${winner} wins this round!`);
         } else {
             displayController.setHeaderText(`Tie!`);
         }
-        
+        setTimeout(() => {
+            displayController.setHeaderText(`Round ${roundNum}`)
+            startRound();
+        }, 2000);
     };
     const start = (mode) => {
         displayController.initInterface(); // initializes interface for game
         setGamemode(mode) // human players or human vs AI
+        roundNum = 1;
+        displayController.setHeaderText(`Round ${roundNum}`);
         if (gamemode === 'playerVSplayer') {
             player2 = Player('Player 2', 'X', true);
         } else {
